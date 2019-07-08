@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/files/angeledei.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/avemariapt.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/credoapostolicopt.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/credopt.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/gloriapt.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/painossopt.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/salverainha.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/santoanjo.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/files/venisanctespiritus.txt" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/files/vindeespiritosanto.txt" charset="UTF-8" />
+  </component>
+</project>
