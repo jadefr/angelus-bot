@@ -7,10 +7,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.*;
 
 public class AngelusBot extends TelegramLongPollingBot {
 
-    public void onUpdateReceived(Update update) {
+    public void onUpdateReceived(final Update update) {
 
         String command = update.getMessage().getText();
 
@@ -114,6 +115,58 @@ public class AngelusBot extends TelegramLongPollingBot {
         }
 
 
+        if (command.equals("/setAngelusPTText")) {
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    SendMessage message = new SendMessage();
+
+                    String angeluspt = "src/files/angeluspt.txt";
+                    setTextFromFile(message, angeluspt);
+
+                    message.setChatId(update.getMessage().getChatId());
+
+                    try {
+
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            };
+
+            setScheduler(timerTask);
+
+        }
+
+
+        if (command.equals("/setAngelusLTText")) {
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    SendMessage message = new SendMessage();
+
+                    String angeluslt = "src/files/angeluslt.txt";
+                    setTextFromFile(message, angeluslt);
+
+                    message.setChatId(update.getMessage().getChatId());
+
+                    try {
+
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            };
+
+            setScheduler(timerTask);
+
+        }
+
+
         message.setChatId(update.getMessage().getChatId());
 
         try {
@@ -121,6 +174,27 @@ public class AngelusBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setScheduler(TimerTask timerTask){
+        Timer timer = new Timer("Timer");
+
+        Date current = new Date();
+
+        Calendar noonCalendar = new GregorianCalendar(2019,6, 11,12,0,0);
+        Date noon = noonCalendar.getTime();
+
+        Calendar sixCalendar = new GregorianCalendar(2019, 6, 18, 0, 0);
+        Date six = sixCalendar.getTime();
+
+        long delayTillNoon = noon.getTime() - current.getTime();
+        long noonPeriod = 1000L * 60L * 60L * 24L;
+
+        long delayTillSix = six.getTime() - current.getTime();
+        long sixPeriod = 1000L * 60L * 60L * 12L;
+
+        timer.scheduleAtFixedRate(timerTask, delayTillNoon, noonPeriod);
+        timer.scheduleAtFixedRate(timerTask, delayTillSix, sixPeriod);
     }
 
     public String getBotUsername() {
@@ -131,8 +205,8 @@ public class AngelusBot extends TelegramLongPollingBot {
         return "";
     }
 
-
     private void setTextFromFile(SendMessage message, String fileName) {
+
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(fileName);
@@ -154,5 +228,6 @@ public class AngelusBot extends TelegramLongPollingBot {
             }
         }
     }
+
 
 }
