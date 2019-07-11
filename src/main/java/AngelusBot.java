@@ -1,13 +1,21 @@
 import org.apache.commons.io.IOUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+
+import static java.lang.Math.toIntExact;
+
+// Arrumar o dia em que se deseja iniciar o disparo de msgs nos metodos setSchedulerAtSix e setSchedulerAtNoon
+
 
 public class AngelusBot extends TelegramLongPollingBot {
 
@@ -16,6 +24,31 @@ public class AngelusBot extends TelegramLongPollingBot {
         String command = update.getMessage().getText();
 
         SendMessage message = new SendMessage();
+
+        long chat_id = update.getMessage().getChatId();
+
+        if (command.equals("/start")) {
+
+            String angeluspt = "src/files/angeluspt.txt";
+
+            TimerTask taskSixPT = setAngelus(update, angeluspt);
+            setSchedulerAtSix(taskSixPT);
+
+            TimerTask taskNoonPT = setAngelus(update, angeluspt);
+            setSchedulerAtNoon(taskNoonPT);
+
+
+            String angeluslt = "src/files/angeluslt.txt";
+
+            TimerTask taskSixLT = setAngelus(update, angeluslt);
+            setSchedulerAtSix(taskSixLT);
+
+            TimerTask taskNoonLT = setAngelus(update, angeluslt);
+            setSchedulerAtNoon(taskNoonLT);
+
+
+        }
+
 
         if (command.equals("/portugues")) {
 
@@ -114,8 +147,13 @@ public class AngelusBot extends TelegramLongPollingBot {
             setTextFromFile(message, venicreator);
         }
 
+        if (command.equals("/anjodeportugal")) {
+            String anjodeportugal = "src/files/anjodeportugal.txt";
+            setTextFromFile(message, anjodeportugal);
+        }
 
-        if (command.equals("/setAngelusPTText")) { //comando do desenvolvedor, indisponivel ao usuario
+
+        /*if (command.equals("/setAngelusPTText")) { //comando do desenvolvedor, indisponivel ao usuario
             String angeluspt = "src/files/angeluspt.txt";
 
             TimerTask taskSix = setAngelus(update, angeluspt);
@@ -135,8 +173,7 @@ public class AngelusBot extends TelegramLongPollingBot {
             TimerTask taskNoon = setAngelus(update, angeluslt);
             setSchedulerAtNoon(taskNoon);
 
-        }
-
+        }*/
 
 
         message.setChatId(update.getMessage().getChatId());
@@ -146,9 +183,9 @@ public class AngelusBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
+
     }
-
-
 
 
     public String getBotUsername() {
@@ -212,7 +249,7 @@ public class AngelusBot extends TelegramLongPollingBot {
         Date current = new Date();
         System.out.println("current: " + current);
 
-        Calendar noonCalendar = new GregorianCalendar(2019, 6, 11, 12, 0, 0);
+        Calendar noonCalendar = new GregorianCalendar(2019, 6, 12, 12, 0, 0);
         Date noon = noonCalendar.getTime();
         System.out.println("noon: " + noon);
 
@@ -230,7 +267,7 @@ public class AngelusBot extends TelegramLongPollingBot {
         Date current = new Date();
         System.out.println("current: " + current);
 
-        Calendar sixCalendar = new GregorianCalendar(2019, 6, 11, 6, 0, 0);
+        Calendar sixCalendar = new GregorianCalendar(2019, 6, 12, 6, 0, 0);
         Date six = sixCalendar.getTime();
         System.out.println("six: " + six);
 
