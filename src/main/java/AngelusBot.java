@@ -115,56 +115,28 @@ public class AngelusBot extends TelegramLongPollingBot {
         }
 
 
-        if (command.equals("/setAngelusPTText")) {
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    SendMessage message = new SendMessage();
+        if (command.equals("/setAngelusPTText")) { //comando do desenvolvedor, indisponivel ao usuario
+            String angeluspt = "src/files/angeluspt.txt";
 
-                    String angeluspt = "src/files/angeluspt.txt";
-                    setTextFromFile(message, angeluspt);
+            TimerTask taskSix = setAngelus(update, angeluspt);
+            setSchedulerAtSix(taskSix);
 
-                    message.setChatId(update.getMessage().getChatId());
-
-                    try {
-
-                        execute(message);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            };
-
-            setScheduler(timerTask);
-
+            TimerTask taskNoon = setAngelus(update, angeluspt);
+            setSchedulerAtNoon(taskNoon);
         }
 
 
-        if (command.equals("/setAngelusLTText")) {
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    SendMessage message = new SendMessage();
+        if (command.equals("/setAngelusLTText")) { //comando do desenvolvedor, indisponivel ao usuario
+            String angeluslt = "src/files/angeluslt.txt";
 
-                    String angeluslt = "src/files/angeluslt.txt";
-                    setTextFromFile(message, angeluslt);
+            TimerTask taskSix = setAngelus(update, angeluslt);
+            setSchedulerAtSix(taskSix);
 
-                    message.setChatId(update.getMessage().getChatId());
-
-                    try {
-
-                        execute(message);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            };
-
-            setScheduler(timerTask);
+            TimerTask taskNoon = setAngelus(update, angeluslt);
+            setSchedulerAtNoon(taskNoon);
 
         }
+
 
 
         message.setChatId(update.getMessage().getChatId());
@@ -176,26 +148,8 @@ public class AngelusBot extends TelegramLongPollingBot {
         }
     }
 
-    private void setScheduler(TimerTask timerTask){
-        Timer timer = new Timer("Timer");
 
-        Date current = new Date();
 
-        Calendar noonCalendar = new GregorianCalendar(2019,6, 11,12,0,0);
-        Date noon = noonCalendar.getTime();
-
-        Calendar sixCalendar = new GregorianCalendar(2019, 6, 18, 0, 0);
-        Date six = sixCalendar.getTime();
-
-        long delayTillNoon = noon.getTime() - current.getTime();
-        long noonPeriod = 1000L * 60L * 60L * 24L;
-
-        long delayTillSix = six.getTime() - current.getTime();
-        long sixPeriod = 1000L * 60L * 60L * 12L;
-
-        timer.scheduleAtFixedRate(timerTask, delayTillNoon, noonPeriod);
-        timer.scheduleAtFixedRate(timerTask, delayTillSix, sixPeriod);
-    }
 
     public String getBotUsername() {
         return "angelus_domini_bot";
@@ -229,5 +183,62 @@ public class AngelusBot extends TelegramLongPollingBot {
         }
     }
 
+    private TimerTask setAngelus(final Update update, final String angelusFile) {
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                SendMessage message = new SendMessage();
+
+                setTextFromFile(message, angelusFile);
+
+                message.setChatId(update.getMessage().getChatId());
+
+                try {
+
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        return timerTask;
+    }
+
+    private void setSchedulerAtNoon(TimerTask timerTask) {
+        Timer timer = new Timer("Timer");
+
+        Date current = new Date();
+        System.out.println("current: " + current);
+
+        Calendar noonCalendar = new GregorianCalendar(2019, 6, 11, 12, 0, 0);
+        Date noon = noonCalendar.getTime();
+        System.out.println("noon: " + noon);
+
+        long delayTillNoon = noon.getTime() - current.getTime();
+        System.out.println("delayTillNoon: " + delayTillNoon);
+        long noonPeriod = 1000L * 60L * 60L * 24L;
+
+        timer.scheduleAtFixedRate(timerTask, delayTillNoon, noonPeriod); // schedules the message to 12pm everyday
+
+    }
+
+    private void setSchedulerAtSix(TimerTask timerTask) {
+        Timer timer = new Timer("Timer");
+
+        Date current = new Date();
+        System.out.println("current: " + current);
+
+        Calendar sixCalendar = new GregorianCalendar(2019, 6, 11, 6, 0, 0);
+        Date six = sixCalendar.getTime();
+        System.out.println("six: " + six);
+
+        long delayTillSix = six.getTime() - current.getTime();
+        System.out.println("delayTillSix: " + delayTillSix);
+        long sixPeriod = 1000L * 60L * 60L * 12L;
+
+        timer.scheduleAtFixedRate(timerTask, delayTillSix, sixPeriod); // schedules the message to 6am and 6pm everyday
+    }
 
 }
