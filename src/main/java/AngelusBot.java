@@ -1,10 +1,9 @@
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.FileInputStream;
@@ -12,9 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import static java.lang.Math.toIntExact;
-
-// Arrumar o dia em que se deseja iniciar o disparo de msgs nos metodos setSchedulerAtSix e setSchedulerAtNoon
 
 
 public class AngelusBot extends TelegramLongPollingBot {
@@ -27,129 +23,191 @@ public class AngelusBot extends TelegramLongPollingBot {
 
         long chat_id = update.getMessage().getChatId();
 
+
+        /*if (command.equals("/start")) {
+            // sets the Angelus in Portuguese
+            String angeluspt = "src/main/resources/files/angeluspt.txt";
+            TimerTask taskPT = setAngelus(update, angeluspt);
+            setScheduler(taskPT);
+            System.out.println("Setting the Angelus in Portuguese");
+
+            // sets the Angelus in Latin
+            String angeluslt = "src/main/resources/files/angeluslt.txt";
+            TimerTask taskLT = setAngelus(update, angeluslt);
+            setScheduler(taskLT);
+            System.out.println("Setting the Angelus in Latin");
+        }*/
+
+
         if (command.equals("/start")) {
 
-            String angeluspt = "src/files/angeluspt.txt";
+            // sets the Angelus in Portuguese
+            System.out.println("Setting the Angelus in Portuguese\n");
 
-            TimerTask taskSixPT = setAngelus(update, angeluspt);
-            setSchedulerAtSix(taskSixPT);
+            //String angeluspt = "src/main/resources/files/angeluspt.txt";
+            String angeluspt = "ANGELUSPT";
+            System.out.println("Angelus String ANGELUSPT: " + angeluspt);
 
-            TimerTask taskNoonPT = setAngelus(update, angeluspt);
-            setSchedulerAtNoon(taskNoonPT);
-
-
-            String angeluslt = "src/files/angeluslt.txt";
-
-            TimerTask taskSixLT = setAngelus(update, angeluslt);
-            setSchedulerAtSix(taskSixLT);
-
-            TimerTask taskNoonLT = setAngelus(update, angeluslt);
-            setSchedulerAtNoon(taskNoonLT);
+            TimerTask taskPT = setAngelus(update, angeluspt);
+            setScheduler(taskPT);
+            System.out.println("\n");
 
 
+            // sets the Angelus in Latin
+            System.out.println("Setting the Angelus in Latin\n");
+
+            //String angeluslt = "src/main/resources/files/angeluslt.txt";
+            String angeluslt = "ANGELUSLT";
+
+            TimerTask taskLT = setAngelus(update, angeluslt);
+            setScheduler(taskLT);
+            System.out.println("\n");
         }
-
 
         if (command.equals("/portugues")) {
 
-            String portugues = "src/files/angeluspt.txt";
-            setTextFromFile(message, portugues);
+            message.setText(TextFiles.ANGELUSPT);
+
+            //String portugues = "src/main/resources/files/angeluspt.txt";
+            //setTextFromFile(message, portugues);
         }
 
         if (command.equals("/latim")) {
 
-            String latim = "src/files/angeluslt.txt";
-            setTextFromFile(message, latim);
+            message.setText(TextFiles.ANGELUSLT);
+
+            //String latim = "src/main/resources/files/angeluslt.txt";
+            //setTextFromFile(message, latim);
         }
 
         if (command.equals("/avemaria")) {
-            String avemaria = "src/files/avemaria.txt";
-            setTextFromFile(message, avemaria);
+
+            message.setText(TextFiles.AVEMARIA);
+
+            //String avemaria = "src/main/resources/files/avemariapt.txt";
+            //setTextFromFile(message, avemaria);
         }
 
         if (command.equals("/avemariapt")) {
-            String avemariapt = "src/files/avemariapt.txt";
-            setTextFromFile(message, avemariapt);
+
+            message.setText(TextFiles.AVEMARIAPT);
+
+            //String avemariapt = "src/main/resources/files/avemariapt.txt";
+            //setTextFromFile(message, avemariapt);
         }
 
         if (command.equals("/paternoster")) {
-            String paternoster = "src/files/painosso.txt";
-            setTextFromFile(message, paternoster);
+
+            message.setText(TextFiles.PAINOSSO);
+            System.out.println(message.toString());
+
+            //String paternoster = "src/main/resources/files/painosso.txt";
+            //setTextFromFile(message, paternoster);
         }
 
         if (command.equals("/painosso")) {
-            String painosso = "src/files/painossopt.txt";
-            setTextFromFile(message, painosso);
+
+            message.setText(TextFiles.PAINOSSOPT);
+            //String painosso = "src/main/resources/files/painossopt.txt";
+            //setTextFromFile(message, painosso);
         }
 
         if (command.equals("/gloria")) {
-            String gloria = "src/files/gloria.txt";
-            setTextFromFile(message, gloria);
+
+            message.setText(TextFiles.GLORIA);
+            //String gloria = "src/main/resources/files/gloria.txt";
+            //setTextFromFile(message, gloria);
         }
 
         if (command.equals("/gloriapt")) {
-            String gloriapt = "src/files/gloriapt.txt";
-            setTextFromFile(message, gloriapt);
+
+            message.setText(TextFiles.GLORIAPT);
+            //String gloriapt = "src/main/resources/files/gloriapt.txt";
+            //setTextFromFile(message, gloriapt);
         }
 
         if (command.equals("/salveregina")) {
-            String salveregina = "src/files/salveregina.txt";
-            setTextFromFile(message, salveregina);
+
+            message.setText(TextFiles.SALVEREGINA);
+            //String salveregina = "src/main/resources/files/salveregina.txt";
+            //setTextFromFile(message, salveregina);
         }
 
         if (command.equals("/salverainha")) {
-            String salverainha = "src/files/salverainha.txt";
-            setTextFromFile(message, salverainha);
+
+            message.setText(TextFiles.SALVERAINHA);
+            //String salverainha = "src/main/resources/files/salverainha.txt";
+            //setTextFromFile(message, salverainha);
         }
 
         if (command.equals("/credo")) {
-            String credo = "src/files/credolatim.txt";
-            setTextFromFile(message, credo);
+
+            message.setText(TextFiles.CREDOLATIM);
+            //String credo = "src/main/resources/files/credolatim.txt";
+            //setTextFromFile(message, credo);
         }
 
         if (command.equals("/credopt")) {
-            String credopt = "src/files/credopt.txt";
-            setTextFromFile(message, credopt);
+
+            message.setText(TextFiles.CREDOPT);
+            //String credopt = "src/main/resources/files/credopt.txt";
+            //setTextFromFile(message, credopt);
         }
 
         if (command.equals("/credoapost")) {
-            String credoapost = "src/files/credoapostolicolatim.txt";
-            setTextFromFile(message, credoapost);
+
+            message.setText(TextFiles.CREDOAPOSTOLICOLATIM);
+            //String credoapost = "src/main/resources/files/credoapostolicolatim.txt";
+            //setTextFromFile(message, credoapost);
         }
 
         if (command.equals("/credoapostpt")) {
-            String credoapostp = "src/files/credoapostolicopt.txt";
-            setTextFromFile(message, credoapostp);
+
+            message.setText(TextFiles.CREDOAPOSTOLICOPT);
+            //String credoapostp = "src/main/resources/files/credoapostolicopt.txt";
+            //setTextFromFile(message, credoapostp);
         }
 
         if (command.equals("/angeledei")) {
-            String angeledei = "src/files/angeledei.txt";
-            setTextFromFile(message, angeledei);
+
+            message.setText(TextFiles.ANGELEDEI);
+            //String angeledei = "src/main/resources/files/angeledei.txt";
+            //setTextFromFile(message, angeledei);
         }
 
         if (command.equals("/santoanjo")) {
-            String santoanjo = "src/files/santoanjo.txt";
-            setTextFromFile(message, santoanjo);
+
+            message.setText(TextFiles.SANTOANJO);
+            //String santoanjo = "src/main/resources/files/santoanjo.txt";
+            //setTextFromFile(message, santoanjo);
         }
 
         if (command.equals("/venisancte")) {
-            String venisancte = "src/files/venisanctespiritus.txt";
-            setTextFromFile(message, venisancte);
+
+            message.setText(TextFiles.VENISANCTESPIRITUS);
+            //String venisancte = "src/main/resources/files/venisanctespiritus.txt";
+            //setTextFromFile(message, venisancte);
         }
 
         if (command.equals("/vindeespirito")) {
-            String vindeespirito = "src/files/vindeespiritosanto.txt";
-            setTextFromFile(message, vindeespirito);
+
+            message.setText(TextFiles.VINDEESPIRITOSANTO);
+            //String vindeespirito = "src/main/resources/files/vindeespiritosanto.txt";
+            //setTextFromFile(message, vindeespirito);
         }
 
         if (command.equals("/venicreator")) {
-            String venicreator = "src/files/venicreator.txt";
-            setTextFromFile(message, venicreator);
+
+            message.setText(TextFiles.VENICREATOR);
+            //String venicreator = "src/main/resources/files/venicreator.txt";
+            //setTextFromFile(message, venicreator);
         }
 
         if (command.equals("/anjodeportugal")) {
-            String anjodeportugal = "src/files/anjodeportugal.txt";
-            setTextFromFile(message, anjodeportugal);
+
+            message.setText(TextFiles.ANJODEPORTUGAL);
+            //String anjodeportugal = "src/main/resources/files/anjodeportugal.txt";
+            //setTextFromFile(message, anjodeportugal);
         }
 
 
@@ -174,6 +232,8 @@ public class AngelusBot extends TelegramLongPollingBot {
             setSchedulerAtNoon(taskNoon);
 
         }*/
+
+
 
 
         message.setChatId(update.getMessage().getChatId());
@@ -207,6 +267,8 @@ public class AngelusBot extends TelegramLongPollingBot {
         try {
             String text = IOUtils.toString(inputStream);
 
+            System.out.println(text);
+
             message.setText(text);
 
         } catch (IOException e) {
@@ -220,13 +282,28 @@ public class AngelusBot extends TelegramLongPollingBot {
         }
     }
 
+
+
     private TimerTask setAngelus(final Update update, final String angelusFile) {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 SendMessage message = new SendMessage();
 
-                setTextFromFile(message, angelusFile);
+                //setTextFromFile(message, angelusFile);
+
+                System.out.println("angelusFile (setAngelus): " + angelusFile);
+
+                if (angelusFile.equals("ANGELUSPT")){
+                    message.setText(TextFiles.ANGELUSPT);
+                    System.out.println(message.toString());
+                    System.out.println("\n");
+                }
+                else if (angelusFile.equals("ANGELUSLT")){
+                    message.setText(TextFiles.ANGELUSLT);
+                    System.out.println(message.toString());
+                    System.out.println("\n");
+                }
 
                 message.setChatId(update.getMessage().getChatId());
 
@@ -243,39 +320,82 @@ public class AngelusBot extends TelegramLongPollingBot {
         return timerTask;
     }
 
-    private void setSchedulerAtNoon(TimerTask timerTask) {
+
+
+
+    public void setScheduler(TimerTask timerTask){
         Timer timer = new Timer("Timer");
 
-        Date current = new Date();
-        System.out.println("current: " + current);
+        DateTime now = new DateTime();
 
-        Calendar noonCalendar = new GregorianCalendar(2019, 6, 12, 12, 0, 0);
-        Date noon = noonCalendar.getTime();
-        System.out.println("noon: " + noon);
+        int hourNow = now.getHourOfDay();
+        int dayNow = now.getDayOfMonth();
+        int monthNow = now.getMonthOfYear();
+        int yearNow = now.getYear();
 
-        long delayTillNoon = noon.getTime() - current.getTime();
-        System.out.println("delayTillNoon: " + delayTillNoon);
-        long noonPeriod = 1000L * 60L * 60L * 24L;
 
-        timer.scheduleAtFixedRate(timerTask, delayTillNoon, noonPeriod); // schedules the message to 12pm everyday
+        if ((hourNow < 6) || ((hourNow > 12) && (hourNow < 18))){ // sets the Angelus of 6am (and of 6pm)
 
-    }
+            //DateTime sixAM = new DateTime(yearNow, monthNow, dayNow, 6, 0, 0);
+            DateTime sixAM = new DateTime(yearNow, monthNow, dayNow, 12, 45, 0);
 
-    private void setSchedulerAtSix(TimerTask timerTask) {
-        Timer timer = new Timer("Timer");
+            Interval interval = new Interval(now, sixAM);
 
-        Date current = new Date();
-        System.out.println("current: " + current);
+            System.out.println("Start    = " + interval.getStart());
+            System.out.println("End      = " + interval.getEnd());
+            System.out.println("interval: " + interval);
+            System.out.println("Days     = " + interval.toDuration().getStandardDays());
+            System.out.println("Hours    = " + interval.toDuration().getStandardHours());
+            System.out.println("Minutes  = " + interval.toDuration().getStandardMinutes());
+            System.out.println("Seconds  = " + interval.toDuration().getStandardSeconds());
 
-        Calendar sixCalendar = new GregorianCalendar(2019, 6, 12, 6, 0, 0);
-        Date six = sixCalendar.getTime();
-        System.out.println("six: " + six);
+            long delayTillSixAM = interval.toDuration().getStandardSeconds();
 
-        long delayTillSix = six.getTime() - current.getTime();
-        System.out.println("delayTillSix: " + delayTillSix);
-        long sixPeriod = 1000L * 60L * 60L * 12L;
+            //long sixPeriod = 1000L * 60L * 60L * 12L; // period of repetition
+            long sixPeriod = 1000L * 60L * 3L; // period of repetition
 
-        timer.scheduleAtFixedRate(timerTask, delayTillSix, sixPeriod); // schedules the message to 6am and 6pm everyday
+            timer.scheduleAtFixedRate(timerTask, delayTillSixAM, sixPeriod); // schedules the message to 6am and 6pm everyday
+
+        } else if ((hourNow > 6) && (hourNow < 12)){ // sets the Angelus of 12pm
+
+            DateTime noon = new DateTime(yearNow, monthNow, dayNow, 12, 0, 0);
+            //DateTime noon = new DateTime(yearNow, monthNow, dayNow, 11, 58, 0);
+
+            Interval tillNoon = new Interval(now, noon);
+            long delayTillNoon = tillNoon.toDuration().getStandardSeconds();
+
+            long noonPeriod = 1000L * 60L * 60L * 24L;
+            //long noonPeriod = 1000L * 60L * 3L; // period of repetition
+
+            timer.scheduleAtFixedRate(timerTask, delayTillNoon, noonPeriod); // schedules the message to 12pm everyday
+
+        } else { // sets the Angelus of 6am of the next day
+
+            DateTime tomorrowSixAM = new DateTime(yearNow, monthNow, (dayNow + 1), 6, 0, 0);
+            System.out.println("time of the task: " + tomorrowSixAM);
+
+            Interval interval = new Interval(now, tomorrowSixAM);
+
+            System.out.println("Start    = " + interval.getStart());
+            System.out.println("End      = " + interval.getEnd());
+            System.out.println("interval: " + interval);
+            System.out.println("Days     = " + interval.toDuration().getStandardDays());
+            System.out.println("Hours    = " + interval.toDuration().getStandardHours());
+            System.out.println("Minutes  = " + interval.toDuration().getStandardMinutes());
+            System.out.println("Seconds  = " + interval.toDuration().getStandardSeconds());
+
+            long delayTillSixAM = interval.toDuration().getStandardSeconds();
+
+
+            long sixPeriod = 1000L * 60L * 60L * 12L; // period of repetition
+            //long sixPeriod = 1000L * 60L * 5L; // period of repetition
+
+            timer.scheduleAtFixedRate(timerTask, delayTillSixAM, sixPeriod); // schedules the message to 6am and 6pm everyday
+
+            System.out.println("delayTillSixAM: " +  delayTillSixAM);
+            System.out.println("sixPeriod: " +  sixPeriod);
+            System.out.println("hourNow: " + hourNow);
+        }
     }
 
 }

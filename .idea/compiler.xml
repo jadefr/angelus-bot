@@ -9,5 +9,8 @@
         <module name="angelus-bot" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="angelus-bot" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
